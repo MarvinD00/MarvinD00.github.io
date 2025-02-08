@@ -1,98 +1,98 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=1024, initial-scale=1"> <!-- Forciert Desktop-Modus -->
-    <title>Passepartout mit Bilderrahmen</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        body {
-            background-color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        .gallery {
-            position: relative;
-            width: 600px;
-            height: 400px;
-        }
-        
-        .wall {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        /* Frame-Container */
-        .frame-container {
-            position: absolute;
-            top: 15%;
-            left: 30%;
-            width: 220px;
-            height: 154px;
-        }
-        
-        /* Rahmenbild */
-        .frame {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 2;
-        }
-        
-        /* Bilder-Carousel */
-        .swiper {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 1;
-        }
-        
-        .swiper img {
-            width: 69%;
-            height: 50%;
-            margin-top: 17%;
-            margin-left: 19%;
-            object-fit: cover;
-            position: fixed;
-        }
-    </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=1024, initial-scale=1"> <!-- Forciert Desktop-Modus -->
+	<title>Passepartout mit Bilderrahmen</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<style>
+		body {
+			background-color: #333;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+		
+		.gallery {
+			position: relative;
+			width: 600px;
+			height: 400px;
+		}
+		
+		.wall {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		
+		/* Frame-Container */
+		.frame-container {
+			position: absolute;
+			top: 15%;
+			left: 30%;
+			width: 220px;
+			height: 154px;
+		}
+		
+		/* Rahmenbild */
+		.frame {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			z-index: 2;
+		}
+		
+		/* Bilder-Carousel */
+		.swiper {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			z-index: 10;
+		}
+		
+		.swiper img {
+			width: 69%;
+			height: 50%;
+			margin-top: 17%;
+			margin-left: 19%;
+			object-fit: cover;
+			position: fixed;
+		}
+	</style>
 </head>
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktive Galerie</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
-    <link rel="stylesheet" href="styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Interaktive Galerie</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <div class="gallery">
-        <img src="bg.jpeg" alt="Wand Hintergrund" class="wall">
+	<div class="gallery">
+		<img src="bg.jpeg" alt="Wand Hintergrund" class="wall">
 
-        <!-- Frame mit transparentem Bereich -->
-        <div class="frame-container">            
-            <!-- Bilder-Carousel im Rahmen -->
-            <div class="swiper" style="z-index: 10;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="bild.jpeg" alt="Bild 1">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- Frame mit transparentem Bereich -->
+		<div class="frame-container">
+			<!-- Bilder-Carousel im Rahmen -->
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img src="bild.jpeg" alt="Bild 1">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+	<script src="script.js"></script>
 </body>
 </html>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
