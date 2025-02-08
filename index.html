@@ -64,17 +64,27 @@
 		}
 
 		.books {
-			position: absolute;
-			top: 68vw;
-			left: 53vw;
 		}
 
+		.shop {
+			position: absolute;
+			top: 66.5vw;
+			left: 54.6vw;
+			width:  12vw;
+			cursor: pointer;
+		}
+			.shop:hover {
+				opacity: 0.8;
+			}
 		.impressum {
+			position: absolute;
+			top: 68.3vw;
+			left: 53.2vw;
 			width:  14.5vw;
 			cursor: pointer;
 		}
 			.impressum:hover {
-				opacity: 0.7;
+				opacity: 0.8;
 			}
 	</style>
 </head>
@@ -104,6 +114,7 @@
 		</div>
 
 		<div class="books">
+			<img src="shop.jpeg" alt="shop" class="shop" onclick="window.location.href='shop.html'">
 			<img src="impressum.jpeg" alt="Impressum" class="impressum" onclick="window.location.href='impressum.html'">
 		</div>
 
