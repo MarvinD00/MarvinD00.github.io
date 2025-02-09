@@ -133,7 +133,7 @@
     .lightbox .close {
       position: absolute;
       top: 20px;
-      right: 30px;
+      left: 30px;
       font-size: 2rem;
       color: white;
       cursor: pointer;
@@ -199,6 +199,41 @@
             <img src="bild4.jpeg" data-full="bild4_4k.jpeg" data-id="4" class="d-block w-100 picture" alt="Bild 4">
           </div>
         </div>
+		<div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild5.jpeg" data-full="bild5_4k.jpeg" data-id="5" class="d-block w-100 picture" alt="Bild 5">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild6.jpeg" data-full="bild6_4k.jpeg" data-id="6" class="d-block w-100 picture" alt="Bild 6">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild7.jpeg" data-full="bild7_4k.jpeg" data-id="7" class="d-block w-100 picture" alt="Bild 7">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild8.jpeg" data-full="bild8_4k.jpeg" data-id="8" class="d-block w-100 picture" alt="Bild 8">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild9.jpeg" data-full="bild9_4k.jpeg" data-id="9" class="d-block w-100 picture" alt="Bild 9">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild10.jpeg" data-full="bild10_4k.jpeg" data-id="10" class="d-block w-100 picture" alt="Bild 10">
+			</div>
+		  </div>
+		  <div class="carousel-item">
+			<div class="carousel-picture-container">
+			  <img src="bild11.jpeg" data-full="bild11_4k.jpeg" data-id="11" class="d-block w-100 picture" alt="Bild 11">
+			</div>
+		  </div>
       </div>
     </div>
   </div>
@@ -216,7 +251,7 @@
     </div>
   </div>
 
-  <div id="editor-panel" class="panel" style="display: none;">
+  <div id="redakteur-panel" class="panel" style="display: none;">
     <h4>Bild Upload</h4>
     <form id="upload-form">
       <div class="mb-3">
@@ -327,12 +362,13 @@
 		};
       }
       if (loggedIn === 'true' && userRole === 'redakteur') {
-        document.getElementById('editor-panel').style.display = 'block';
+        document.getElementById('redakteur-panel').style.display = 'block';
       }
       if (loggedIn === 'true' && userRole === 'admin') {
         document.getElementById('admin-panel').style.display = 'block';
         loadUserList();
       }
+	  loadImages();
     });
 
     async function loadUserList() {
@@ -378,31 +414,62 @@
       }
     }
 
-    document.getElementById('upload-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const fileInput = document.getElementById('imageFile');
-      const descInput = document.getElementById('imageDesc');
-      const formData = new FormData();
-      if (fileInput.files.length === 0) {
-        alert("Bitte ein Bild auswählen");
-        return;
-      }
-      formData.append('image', fileInput.files[0]);
-      formData.append('description', descInput.value);
-      try {
-        const response = await fetch('/upload', {
-          method: 'POST',
-          body: formData
-        });
-        if (response.ok) {
-          alert("Bild erfolgreich hochgeladen");
-        } else {
-          alert("Fehler beim Hochladen des Bildes");
-        }
-      } catch (error) {
-        console.error("Fehler:", error);
-      }
-    });
+	document.getElementById('upload-form').addEventListener('submit', async function(e) {
+		e.preventDefault();
+		const fileInput = document.getElementById('imageFile');
+		const descInput = document.getElementById('imageDesc');
+		const formData = new FormData();
+		
+		if (fileInput.files.length === 0) {
+		  alert("Bitte ein Bild auswählen");
+		  return;
+		}
+		
+		formData.append('image', fileInput.files[0]);
+		formData.append('description', descInput.value);
+		
+		try {
+		  const response = await fetch('/upload', {
+			method: 'POST',
+			body: formData,
+			credentials: 'include'
+		  });
+		  
+		  if (response.ok) {
+			alert("Bild erfolgreich hochgeladen");
+			loadImages();
+			window.location.reload();
+		  } else {
+			alert("Fehler beim Hochladen des Bildes");
+		  }
+		} catch (error) {
+		  console.error("Fehler:", error);
+		}
+	  });
+
+	  async function loadImages() {
+		const response = await fetch('/images', { credentials: 'include' });
+		const images = await response.json();
+		const carouselInner = document.querySelector('.carousel-inner');
+	  
+		carouselInner.innerHTML = '';
+	  
+		images.forEach((image, index) => {
+		  const div = document.createElement('div');
+		  div.classList.add('carousel-item');
+		  if (index === 0) div.classList.add('active');
+	  
+		  div.innerHTML = `
+			<div class="carousel-picture-container">
+			  <img src="/uploads/${image.filename}" class="d-block w-100 picture" alt="Bild">
+			</div>
+		  `;
+	  
+		  carouselInner.appendChild(div);
+		});
+	  
+		console.log(images); // Debugging: Prüfen, ob Bilder empfangen werden
+	  }
   </script>
 </body>
 </html>

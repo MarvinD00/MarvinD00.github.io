@@ -48,7 +48,7 @@ db.serialize(() => {
     if (row.count === 0) {
       const insert = db.prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
       insert.run("admin", "admin", "admin");
-      insert.run("editor", "editor", "editor");
+      insert.run("redakteur", "redakteur", "redakteur");
       insert.finalize();
     }
   });
@@ -88,7 +88,6 @@ app.post('/login', (req, res) => {
 		res.status(500).json({ error: "Datenbankfehler" });
 	  } else if (row) {
 		req.session.user = row;
-		// Sende die Benutzerinformationen als JSON zurück
 		res.json({ message: "Erfolgreich eingeloggt", user: row });
 	  } else {
 		res.status(401).json({ error: "Falsche Zugangsdaten" });
@@ -163,21 +162,22 @@ app.get('/images', isAuthenticated, (req, res) => {
 });
 
 app.post('/upload', isAuthenticated, (req, res, next) => {
-  if (req.session.user.role === "admin" || req.session.user.role === "editor") {
-    next();
-  } else {
-    res.status(403).send("Zugriff verweigert");
-  }
-}, upload.single('image'), (req, res) => {
-  const filename = req.file.filename;
-  db.run("INSERT INTO images (filename) VALUES (?)", [filename], function (err) {
-    if (err) {
-      res.status(500).send("Fehler beim Speichern des Bildes in der Datenbank");
-    } else {
-      res.json({ id: this.lastID, filename });
-    }
+	if (req.session.user.role === "admin" || req.session.user.role === "redakteur") {
+	  next();
+	} else {
+	  res.status(403).send("Zugriff verweigert");
+	}
+  }, upload.single('image'), (req, res) => {
+	const filename = req.file.filename;
+	db.run("INSERT INTO images (filename) VALUES (?)", [filename], function (err) {
+	  if (err) {
+		res.status(500).send("Fehler beim Speichern des Bildes in der Datenbank");
+	  } else {
+		res.json({ id: this.lastID, filename });
+	  }
+	});
   });
-});
+  
 
 app.delete('/images/:id', isAuthenticated, hasRole('admin'), (req, res) => {
   const id = req.params.id;
