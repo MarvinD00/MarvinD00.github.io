@@ -67,7 +67,7 @@ function isAuthenticated(req, res, next) {
   if (req.session && req.session.user) {
     next();
   } else {
-    res.status(401).send("Nicht autorisiert");
+    res.status(401).json("Nicht autorisiert");
   }
 }
 
@@ -116,7 +116,6 @@ app.post('/register', (req, res) => {
   });
 });
 
-// Endpoints für die Benutzerverwaltung (nur Admin)
 app.get('/users', isAuthenticated, hasRole('admin'), (req, res) => {
   db.all("SELECT id, username, role FROM users", (err, rows) => {
     if (err) {
@@ -150,7 +149,6 @@ app.post('/users', isAuthenticated, hasRole('admin'), (req, res) => {
   });
 });
 
-// Endpoints für Bilder
 app.get('/images', isAuthenticated, (req, res) => {
   db.all("SELECT * FROM images", (err, rows) => {
     if (err) {
@@ -203,7 +201,6 @@ app.delete('/images/:id', isAuthenticated, hasRole('admin'), (req, res) => {
   });
 });
 
-// Endpoints für Kommentare
 app.get('/comments', isAuthenticated, (req, res) => {
   const imageId = req.query.imageId;
   if (!imageId) {
