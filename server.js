@@ -149,7 +149,7 @@ app.post('/users', isAuthenticated, hasRole('admin'), (req, res) => {
   });
 });
 
-app.get('/images', isAuthenticated, (req, res) => {
+app.get('/images', (req, res) => {
   db.all("SELECT * FROM images", (err, rows) => {
     if (err) {
       res.status(500).send("Fehler beim Abrufen der Bilder");

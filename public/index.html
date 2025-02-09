@@ -278,28 +278,46 @@
       }
     }
 
-    async function loadComments(imageId) {
-      commentList.innerHTML = '';
-      try {
-        const response = await fetch(`/comments?imageId=${imageId}`);
-        if (response.ok) {
-          const comments = await response.json();
-          comments.forEach(c => {
-            const li = document.createElement('li');
-            li.textContent = `${c.username}: ${c.comment}`;
-            commentList.appendChild(li);
-          });
-        } else {
-          console.error("Fehler beim Laden der Kommentare");
-        }
-      } catch (error) {
-        console.error("Fehler:", error);
-      }
-    }
+	async function loadComments(imageId) {
+		commentList.innerHTML = '';
+		try {
+		  const response = await fetch(`/comments?imageId=${imageId}`);
+		  if (response.ok) {
+			const comments = await response.json();
+			const userRole = localStorage.getItem('userRole');
+	  
+			comments.forEach(c => {
+			  const li = document.createElement('li');
+			  li.innerHTML = `<span>${c.username}: ${c.comment}</span>`;
+	  
+			  if (userRole === 'redakteur' || userRole === 'admin') {
+				const deleteBtn = document.createElement('button');
+				deleteBtn.textContent = '✖';
+				deleteBtn.style.marginLeft = '10px';
+				deleteBtn.style.color = 'red';
+				deleteBtn.style.cursor = 'pointer';
+				deleteBtn.onclick = () => {
+					deleteComment(c.id);
+					loadComments(imageId);
+					window.location.reload();
+				  };
+				li.appendChild(deleteBtn);
+			  }
+	  
+			  commentList.appendChild(li);
+			});
+		  } else {
+			console.error("Fehler beim Laden der Kommentare");
+		  }
+		} catch (error) {
+		  console.error("Fehler:", error);
+		}
+	  }
 
     window.addEventListener('DOMContentLoaded', () => {
       let loggedIn = localStorage.getItem('loggedIn');
       let userRole = localStorage.getItem('userRole');
+	  loadImages();
       if (loggedIn === 'true') {
         const loginImg = document.querySelector('.anmeldung');
         loginImg.src = 'angemeldet.jpeg';
@@ -315,7 +333,6 @@
         document.getElementById('admin-panel').style.display = 'block';
         loadUserList();
       }
-	  loadImages();
     });
 
     async function loadUserList() {
@@ -408,12 +425,43 @@
 	  
 		  div.innerHTML = `
 			<div class="carousel-picture-container">
-			  <img src="/uploads/${image.filename}" class="d-block w-100 picture" alt="Bild">
+			  <img src="/uploads/${image.filename}" class="d-block w-100 picture" alt="Bild" data-id="${image.id}">
 			</div>
 		  `;
 	  
 		  carouselInner.appendChild(div);
 		});
+
+		document.querySelectorAll('.picture').forEach(img => {
+			img.addEventListener('click', function() {
+				currentImageId = this.getAttribute('data-id');
+				lightboxImg.src = this.src;
+				lightbox.style.display = 'flex';
+				loadComments(currentImageId);
+				if (localStorage.getItem('loggedIn') === 'true') {
+				commentSection.style.display = 'block';
+				commentForm.style.display = 'block';
+				} else {
+				commentSection.style.display = 'none';
+				commentForm.style.display = 'none';
+				}
+			});
+		});
+	}
+	
+	async function deleteComment(commentId) {
+		try {
+			const response = await fetch(`/comments/${commentId}`, {
+			method: 'DELETE',
+			});
+			if (response.ok) {
+			console.log("Kommentar gelöscht:", commentId);
+			} else {
+			console.error("Fehler beim Löschen des Kommentars");
+			}
+		} catch (error) {
+			console.error("Fehler:", error);
+		}
 	}
   </script>
 </body>
